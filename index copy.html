@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Coloring Book Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Fredoka One', cursive, sans-serif;
+      background-image: linear-gradient(to right, #89f7fe, #66a6ff);
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+    header {
+      background-color: #00796b;
+      padding: 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 3em;
+      color: #fff;
+    }
+    #productContainer {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .product {
+      border: 5px solid #00796b;
+      border-radius: 15px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+      max-width: 300px;
+      text-align: center;
+    }
+    .product h2 {
+      font-size: 1.5em;
+      color: #00796b;
+    }
+    .product img.thumbnail {
+      max-width: 100px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    .gallery {
+      max-width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+    .gallery img {
+      max-width: 80px;
+      border-radius: 10px;
+      display: none;
+      margin: 5px;
+    }
+    .gallery img.active {
+      display: block;
+    }
+    #payButton {
+      background-color: #00796b;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.5em;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+    #payButton:hover {
+      background-color: #004d40;
+    }
+    footer {
+      background-color: #00796b;
+      color: #fff;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to the Coloring Book Store</h1>
+  </header>
+  <main id="productContainer">
+    <div class="product" id="bookAProduct">
+      <img class="thumbnail" src="images/bookA/1.PNG" alt="Book A Cover">
+      <h2>Book A</h2>
+      <p>$4</p>
+      <label><input type="checkbox" id="bookA" value="4"> Select Book A</label>
+      <div class="gallery" id="galleryA"></div>
+    </div>
+    <div class="product" id="bookBProduct">
+      <img class="thumbnail" src="images/bookB/1.PNG" alt="Book B Cover">
+      <h2>Book B</h2>
+      <p>$4</p>
+      <label><input type="checkbox" id="bookB" value="4"> Select Book B</label>
+      <div class="gallery" id="galleryB"></div>
+    </div>
+    <div class="product" id="bookCProduct">
+      <img class="thumbnail" src="images/bookC/1.PNG" alt="Book C Cover">
+      <h2>Book C</h2>
+      <p>$4</p>
+      <label><input type="checkbox" id="bookC" value="4"> Select Book C</label>
+      <div class="gallery" id="galleryC"></div>
+    </div>
+  </main>
+  <p>Total Price: $<span id="totalPrice">0</span></p>
+  <button id="payButton">Buy Now with MetaMask</button>
+  <footer>
+    <p>&copy; 2024 Coloring Book Store</p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+  <script>
+    const bookA = document.getElementById('bookA');
+    const bookB = document.getElementById('bookB');
+    const bookC = document.getElementById('bookC');
+    const totalPriceElem = document.getElementById('totalPrice');
+
+    function updateTotalPrice() {
+      const books = [bookA, bookB, bookC];
+      const selectedBooks = books.filter(book => book.checked);
+      let totalPrice = 0;
+
+      switch (selectedBooks.length) {
+        case 1:
+          totalPrice = 4;
+          break;
+        case 2:
+          totalPrice = 7;
+          break;
+        case 3:
+          totalPrice = 9;
+          break;
+      }
+
+      totalPriceElem.textContent = totalPrice;
+    }
+
+    bookA.addEventListener('change', updateTotalPrice);
+    bookB.addEventListener('change', updateTotalPrice);
+    bookC.addEventListener('change', updateTotalPrice);
+
+    function createGallery(galleryId, imagePathPattern, frameCount) {
+      const gallery = document.getElementById(galleryId);
+      for (let i = 1; i <= frameCount; i++) {
+        const img = document.createElement('img');
+        img.src = imagePathPattern.replace('{i}', i);
+        if (i === 1) img.classList.add('active');
+        gallery.appendChild(img);
+      }
+      let currentIndex = 0;
+      setInterval(() => {
+        const images = gallery.querySelectorAll('img');
+        images[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % images.length;
+        images[currentIndex].classList.add('active');
+      }, 500); // Slideshow speed set to 500ms
+    }
+
+    createGallery('galleryA', 'images/bookA/{i}.PNG', 34);
+    createGallery('galleryB', 'images/bookB/{i}.PNG', 34);
+    createGallery('galleryC', 'images/bookC/{i}.PNG', 34);
+  </script>
+</body>
+</html>

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Character Creator</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Fredoka One', cursive, sans-serif;
+    background-image: linear-gradient(to right, #89f7fe, #66a6ff);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+}
+#headerImage {
+    margin-top: 0px;
+    width: auto;
+    height: 285px;
+}
+#mainContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 0px;
+    flex-wrap: wrap;
+}
+#traitSelection {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0px;
+    justify-items: center;
+    padding: 0px;
+    background: linear-gradient(to bottom, #89f7fe, #66a6ff);
+    border-radius: 60px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 100%;
+    margin-bottom: 10px;
+}
+.category-button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 23px;
+    border-radius: 30px;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+.category-button:hover {
+    opacity: 0.8;
+}
+.background-button {
+    background-color: #3498db;
+}
+.skin-button {
+    background-color: #3498db;
+}
+.face-button {
+    background-color: #3498db;
+}
+.facialhair-button {
+    background-color: #3498db;
+}
+.clothing-button {
+    background-color: #2ecc71;
+}
+.hair-button {
+    background-color: #2ecc71;
+}
+.spaceshine-button {
+    background-color: #2ecc71;
+}
+.hairhoodie-button {
+    background-color: #c0392b;
+}
+.accessories-button {
+    background-color: #d35400;
+}
+.hat-button {
+    background-color: #2ecc71;
+}
+.hathoodie-button {
+    background-color: #c0392b;
+}
+.extra-button {
+    background-color: #c0392b;
+}
+.hoodieup-button {
+    background-color: #c0392b;
+}
+.hand-button {
+    background-color: #d35400;
+}
+.ball-button {
+    background-color: #d35400;
+}
+#characterDisplayContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 20px;
+    order: 2;
+}
+#characterDisplay {
+    position: relative;
+    width: 700px;
+    height: 700px;
+    border: 0px solid #666;
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+#characterDisplay img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#traitPictures {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 400px;
+    height: 700px;
+    background: linear-gradient(to bottom, #89f7fe, #66a6ff);
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-left: 20px;
+    order: 3;
+    overflow-y: auto;
+}
+.trait-category {
+    display: none;
+    width: 100%;
+}
+.trait-category.active {
+    display: flex;
+}
+.trait-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    margin: 10px 0;
+    background: linear-gradient(to bottom, #89f7fe, #66a6ff);
+    padding: 10px;
+    border-radius: 8px;
+}
+.trait-options img {
+    margin: 5px;
+    width: 80px;
+    height: 80px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.trait-options img:hover {
+    border: 2px solid #666;
+}
+button {
+    margin: 10px;
+    padding: 15px 30px;
+    font-size: 30px;
+    border-radius: 30px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #e67e22;
+}
+#saveButton {
+    margin-top: 20px;
+}
+@media (max-width: 768px) {
+    #mainContent {
+        flex-direction: column;
+        align-items: center;
+    }
+    #traitPictures {
+        width: 90%;
+        margin-left: 0;
+        margin-top: 20px;
+        order: 2;
+    }
+    #characterDisplayContainer {
+        margin: 0;
+        width: 90%;
+        order: 1;
+    }
+    #characterDisplay {
+        width: 100%;
+        height: auto;
+    }
+}
+@media (max-width: 480px) {
+    .category-button {
+        font-size: 18px;
+        padding: 8px 16px;
+    }
+    #characterDisplay {
+        width: 300px;
+        height: 300px;
+    }
+    #traitPictures {
+        width: 100%;
+        height: auto;
+        margin-left: 0;
+    }
+}
+</style>
+</head>
+<body>
+<img id="headerImage" src="HEADER/1.PNG" alt="CREATE YOUR OWN LITTLE OLLIE">
+
+<div id="mainContent">
+    <div id="traitSelection">
+        <button class="category-button background-button" onclick="showCategory('backgroundCategory')">BACKGROUNDS</button>
+        <button class="category-button clothing-button" onclick="showCategory('clothingCategory')">CLOTHING</button>
+        <button class="category-button hoodieup-button" onclick="showCategory('hoodieupCategory')">HOODIES</button>
+        <button class="category-button accessories-button" onclick="showCategory('accessoriesCategory')">SUNGLASSES</button>
+        <button class="category-button skin-button" onclick="showCategory('skinCategory')">SKIN TONE</button>
+        <button class="category-button hair-button" onclick="showCategory('hairCategory')">HAIRSTYLES</button>
+        <button class="category-button hairhoodie-button" onclick="showCategory('hairhoodieCategory')">HAIRSTYLE (HOODIES)</button>
+        <button class="category-button hand-button" onclick="showCategory('handCategory')">HAND GESTURES</button>
+        <button class="category-button face-button" onclick="showCategory('faceCategory')">FACE</button>
+        <button class="category-button hat-button" onclick="showCategory('hatCategory')">HEADWEAR</button>
+        <button class="category-button hathoodie-button" onclick="showCategory('hathoodieCategory')">HATS(HOODIES)</button>
+        <button class="category-button ball-button" onclick="showCategory('ballCategory')">BALLS</button>
+        <button class="category-button facialhair-button" onclick="showCategory('facialhairCategory')">FACIALHAIR</button>
+        <button class="category-button spaceshine-button" onclick="showCategory('spaceshineCategory')">SPACE SHINE</button>
+        <button class="category-button extra-button" onclick="showCategory('extraCategory')">EXTRA</button>
+    </div>
+
+    <div id="characterDisplayContainer">
+        <div id="characterDisplay">
+            <img id="background" alt="">
+            <img id="skin" alt="">
+            <img id="face" alt="">
+            <img id="facialhair" alt="">
+            <img id="accessories" alt="">
+            <img id="hair" alt="">
+            <img id="hat" alt="">
+            <img id="extra" alt="">
+            <img id="clothing" alt="">
+            <img id="hand" alt="">
+            <img id="ball" alt="">
+            <img id="hoodieup" alt="">
+ 
+       </div>
+        <button id="randomButton" onclick="randomizeCharacter()">Randomize</button>
+        <button id="saveButton" onclick="saveCharacterImage()">Save Character</button>
+    </div>
+
+    <div id="traitPictures">
+        <div class="trait-category" id="backgroundCategory">
+            <div class="trait-options">
+                <img src="BACKGROUNDS/1.PNG" alt="Brownish" onclick="selectTrait('background', 'BACKGROUNDS/1.PNG')">
+                <img src="BACKGROUNDS/2.PNG" alt="Brownish" onclick="selectTrait('background', 'BACKGROUNDS/2.PNG')">
+                <img src="BACKGROUNDS/3.PNG" alt="White" onclick="selectTrait('background', 'BACKGROUNDS/3.PNG')">
+                <img src="BACKGROUNDS/4.PNG" alt="Mintish" onclick="selectTrait('background', 'BACKGROUNDS/4.PNG')">
+                <img src="BACKGROUNDS/5.PNG" alt="Bright Green" onclick="selectTrait('background', 'BACKGROUNDS/5.PNG')">
+                <img src="BACKGROUNDS/6.PNG" alt="Purple" onclick="selectTrait('background', 'BACKGROUNDS/6.PNG')">
+                <img src="BACKGROUNDS/7.PNG" alt="Browny/Greeny" onclick="selectTrait('background', 'BACKGROUNDS/7.PNG')">
+                <img src="BACKGROUNDS/8.PNG" alt="Blue" onclick="selectTrait('background', 'BACKGROUNDS/8.PNG')">
+                <img src="BACKGROUNDS/9.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/9.PNG')">
+                <img src="BACKGROUNDS/10.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/10.PNG')">
+                <img src="BACKGROUNDS/11.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/11.PNG')">
+                <img src="BACKGROUNDS/12.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/12.PNG')">
+                <img src="BACKGROUNDS/13.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/13.PNG')">
+                <img src="BACKGROUNDS/14.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/14.PNG')">
+                <img src="BACKGROUNDS/15.PNG" alt="Grey" onclick="selectTrait('background', 'BACKGROUNDS/15.PNG')">
+        </div>
+        </div>
+        <div class="trait-category" id="skinCategory">
+            <div class="trait-options">
+                <img src="SKIN/1.PNG" alt="Skin 1" onclick="selectTrait('skin', 'SKIN/1.PNG')">
+                <img src="SKIN/2.PNG" alt="Skin 2" onclick="selectTrait('skin', 'SKIN/2.PNG')">
+                <img src="SKIN/3.PNG" alt="Skin 3" onclick="selectTrait('skin', 'SKIN/3.PNG')">
+                <img src="SKIN/4.PNG" alt="Skin 4" onclick="selectTrait('skin', 'SKIN/4.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="faceCategory">
+            <div class="trait-options">
+                <img src="FACE/1.PNG" alt="Happy 1" onclick="selectTrait('face', 'FACE/1.PNG')">
+                <img src="FACE/1A.PNG" alt="Happy 2" onclick="selectTrait('face', 'FACE/1A.PNG')">
+                <img src="FACE/2.PNG" alt="Unsure" onclick="selectTrait('face', 'FACE/2.PNG')">
+                <img src="FACE/3.PNG" alt="Determined" onclick="selectTrait('face', 'FACE/3.PNG')">
+                <img src="FACE/4.PNG" alt="Angry 1" onclick="selectTrait('face', 'FACE/4.PNG')">
+                <img src="FACE/5.PNG" alt="Angry 2" onclick="selectTrait('face', 'FACE/5.PNG')">
+                <img src="FACE/6.PNG" alt="Not Impressed" onclick="selectTrait('face', 'FACE/6.PNG')">
+                <img src="FACE/7.PNG" alt="Cheeky" onclick="selectTrait('face', 'FACE/7.PNG')">
+                <img src="FACE/8.PNG" alt="Happy 1" onclick="selectTrait('face', 'FACE/8.PNG')">
+                <img src="FACE/9.PNG" alt="Happy 2" onclick="selectTrait('face', 'FACE/9.PNG')">
+                <img src="FACE/10.PNG" alt="Unsure" onclick="selectTrait('face', 'FACE/10.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="hairCategory">
+            <div class="trait-options">
+                <img src="HAIR/A.PNG" alt="No Hair" onclick="selectTrait('hair', 'HAIR/AA.PNG')">
+                <img src="HAIR/B.PNG" alt="No Hair" onclick="selectTrait('hair', 'HAIR/B.PNG')">
+                <img src="HAIR/C.PNG" alt="No Hair" onclick="selectTrait('hair', 'HAIR/C.PNG')">
+                <img src="HAIR/D.PNG" alt="No Hair" onclick="selectTrait('hair', 'HAIR/D.PNG')">
+                <img src="HAIR/E.PNG" alt="No Hair" onclick="selectTrait('hair', 'HAIR/E.PNG')">
+                <img src="HAIR/29.PNG" alt="White 1" onclick="selectTrait('hair', 'HAIR/29.PNG')">
+                <img src="HAIR/33.PNG" alt="White 2" onclick="selectTrait('hair', 'HAIR/33.PNG')">
+                <img src="HAIR/37.PNG" alt="White 3" onclick="selectTrait('hair', 'HAIR/37.PNG')">
+                <img src="HAIR/41.PNG" alt="White 4" onclick="selectTrait('hair', 'HAIR/41.PNG')">
+                <img src="HAIR/45.PNG" alt="White 5" onclick="selectTrait('hair', 'HAIR/45.PNG')">
+                <img src="HAIR/49.PNG" alt="White 6" onclick="selectTrait('hair', 'HAIR/49.PNG')">
+                <img src="HAIR/53.PNG" alt="White 7" onclick="selectTrait('hair', 'HAIR/53.PNG')">
+                <img src="HAIR/57.PNG" alt="White 8" onclick="selectTrait('hair', 'HAIR/57.PNG')">
+                <img src="HAIR/61.PNG" alt="White 9" onclick="selectTrait('hair', 'HAIR/61.PNG')">
+                <img src="HAIR/30.PNG" alt="Blonde 1" onclick="selectTrait('hair', 'HAIR/30.PNG')">
+                <img src="HAIR/34.PNG" alt="Blonde 2" onclick="selectTrait('hair', 'HAIR/34.PNG')">
+                <img src="HAIR/38.PNG" alt="Blonde 3" onclick="selectTrait('hair', 'HAIR/38.PNG')">
+                <img src="HAIR/42.PNG" alt="Blonde 4" onclick="selectTrait('hair', 'HAIR/42.PNG')">
+                <img src="HAIR/46.PNG" alt="Blonde 5" onclick="selectTrait('hair', 'HAIR/46.PNG')">
+                <img src="HAIR/50.PNG" alt="Blonde 6" onclick="selectTrait('hair', 'HAIR/50.PNG')">
+                <img src="HAIR/54.PNG" alt="Blonde 7" onclick="selectTrait('hair', 'HAIR/54.PNG')">
+                <img src="HAIR/58.PNG" alt="Blonde 8" onclick="selectTrait('hair', 'HAIR/58.PNG')">
+                <img src="HAIR/62.PNG" alt="Blonde 9" onclick="selectTrait('hair', 'HAIR/62.PNG')">
+                <img src="HAIR/31.PNG" alt="Brown 1" onclick="selectTrait('hair', 'HAIR/31.PNG')">
+                <img src="HAIR/35.PNG" alt="Brown 2" onclick="selectTrait('hair', 'HAIR/35.PNG')">
+                <img src="HAIR/39.PNG" alt="Brown 3" onclick="selectTrait('hair', 'HAIR/39.PNG')">
+                <img src="HAIR/43.PNG" alt="Brown 4" onclick="selectTrait('hair', 'HAIR/43.PNG')">
+                <img src="HAIR/47.PNG" alt="Brown 5" onclick="selectTrait('hair', 'HAIR/47.PNG')">
+                <img src="HAIR/51.PNG" alt="Brown 6" onclick="selectTrait('hair', 'HAIR/51.PNG')">
+                <img src="HAIR/55.PNG" alt="Brown 7" onclick="selectTrait('hair', 'HAIR/55.PNG')">
+                <img src="HAIR/59.PNG" alt="Brown 8" onclick="selectTrait('hair', 'HAIR/59.PNG')">
+                <img src="HAIR/63.PNG" alt="Brown 9" onclick="selectTrait('hair', 'HAIR/63.PNG')">
+                <img src="HAIR/32.PNG" alt="Black 1" onclick="selectTrait('hair', 'HAIR/32.PNG')">
+                <img src="HAIR/36.PNG" alt="Black 2" onclick="selectTrait('hair', 'HAIR/36.PNG')">
+                <img src="HAIR/40.PNG" alt="Black 3" onclick="selectTrait('hair', 'HAIR/40.PNG')">
+                <img src="HAIR/44.PNG" alt="Black 4" onclick="selectTrait('hair', 'HAIR/44.PNG')">
+                <img src="HAIR/48.PNG" alt="Black 5" onclick="selectTrait('hair', 'HAIR/48.PNG')">
+                <img src="HAIR/52.PNG" alt="Black 6" onclick="selectTrait('hair', 'HAIR/52.PNG')">
+                <img src="HAIR/56.PNG" alt="Black 7" onclick="selectTrait('hair', 'HAIR/56.PNG')">
+                <img src="HAIR/60.PNG" alt="Black 8" onclick="selectTrait('hair', 'HAIR/60.PNG')">
+                <img src="HAIR/64.PNG" alt="Black 9" onclick="selectTrait('hair', 'HAIR/64.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="hairhoodieCategory">
+            <div class="trait-options">
+                <img src="HAIRHOODIEUP/A.PNG" alt="No Hair" onclick="selectTrait('hair', 'HAIRHOODIEUP/AA.PNG')">
+                <img src="HAIRHOODIEUP/9.PNG" alt="White 1" onclick="selectTrait('hair', 'HAIRHOODIEUP/9.PNG')">
+                <img src="HAIRHOODIEUP/13.PNG" alt="White 2" onclick="selectTrait('hair', 'HAIRHOODIEUP/13.PNG')">
+                <img src="HAIRHOODIEUP/21.PNG" alt="White 3" onclick="selectTrait('hair', 'HAIRHOODIEUP/21.PNG')">
+                <img src="HAIRHOODIEUP/17.PNG" alt="White 4" onclick="selectTrait('hair', 'HAIRHOODIEUP/17.PNG')">
+                <img src="HAIRHOODIEUP/1.PNG" alt="White 5" onclick="selectTrait('hair', 'HAIRHOODIEUP/1.PNG')">
+                <img src="HAIRHOODIEUP/5.PNG" alt="White 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/5.PNG')">
+                <img src="HAIRHOODIEUP/25.PNG" alt="White 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/25.PNG')">
+                <img src="HAIRHOODIEUP/10.PNG" alt="Blonde 1" onclick="selectTrait('hair', 'HAIRHOODIEUP/10.PNG')">
+                <img src="HAIRHOODIEUP/14.PNG" alt="Blonde 2" onclick="selectTrait('hair', 'HAIRHOODIEUP/14.PNG')">
+                <img src="HAIRHOODIEUP/22.PNG" alt="Blonde 3" onclick="selectTrait('hair', 'HAIRHOODIEUP/22.PNG')">
+                <img src="HAIRHOODIEUP/18.PNG" alt="Blonde 4" onclick="selectTrait('hair', 'HAIRHOODIEUP/18.PNG')">
+                <img src="HAIRHOODIEUP/2.PNG" alt="Blonde 5" onclick="selectTrait('hair', 'HAIRHOODIEUP/2.PNG')">
+                <img src="HAIRHOODIEUP/6.PNG" alt="Blonde 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/6.PNG')">
+                <img src="HAIRHOODIEUP/26.PNG" alt="Blonde 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/26.PNG')">
+                <img src="HAIRHOODIEUP/11.PNG" alt="Brown 1" onclick="selectTrait('hair', 'HAIRHOODIEUP/11.PNG')">
+                <img src="HAIRHOODIEUP/15.PNG" alt="Brown 2" onclick="selectTrait('hair', 'HAIRHOODIEUP/15.PNG')">
+                <img src="HAIRHOODIEUP/23.PNG" alt="Brown 3" onclick="selectTrait('hair', 'HAIRHOODIEUP/23.PNG')">
+                <img src="HAIRHOODIEUP/19.PNG" alt="Brown 4" onclick="selectTrait('hair', 'HAIRHOODIEUP/19.PNG')">
+                <img src="HAIRHOODIEUP/3.PNG" alt="Brown 5" onclick="selectTrait('hair', 'HAIRHOODIEUP/3.PNG')">
+                <img src="HAIRHOODIEUP/7.PNG" alt="Brown 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/7.PNG')">
+                <img src="HAIRHOODIEUP/27.PNG" alt="Brown 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/27.PNG')">
+                <img src="HAIRHOODIEUP/12.PNG" alt="Black 1" onclick="selectTrait('hair', 'HAIRHOODIEUP/12.PNG')">
+                <img src="HAIRHOODIEUP/16.PNG" alt="Black 2" onclick="selectTrait('hair', 'HAIRHOODIEUP/16.PNG')">
+                <img src="HAIRHOODIEUP/24.PNG" alt="Black 3" onclick="selectTrait('hair', 'HAIRHOODIEUP/24.PNG')">
+                <img src="HAIRHOODIEUP/20.PNG" alt="Black 4" onclick="selectTrait('hair', 'HAIRHOODIEUP/20.PNG')">
+                <img src="HAIRHOODIEUP/4.PNG" alt="Black 5" onclick="selectTrait('hair', 'HAIRHOODIEUP/4.PNG')">
+                <img src="HAIRHOODIEUP/8.PNG" alt="Black 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/8.PNG')">
+                <img src="HAIRHOODIEUP/28.PNG" alt="Black 6" onclick="selectTrait('hair', 'HAIRHOODIEUP/28.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="clothingCategory">
+            <div class="trait-options">
+
+                <img src="CLOTHING/I1.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I1.PNG')">
+                <img src="CLOTHING/I2.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I2.PNG')">
+                <img src="CLOTHING/I3.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I3.PNG')">
+                <img src="CLOTHING/I4.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I4.PNG')">
+                <img src="CLOTHING/I5.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I5.PNG')">
+                <img src="CLOTHING/I6.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I6.PNG')">
+                <img src="CLOTHING/I7.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I7.PNG')">
+                <img src="CLOTHING/I8.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I8.PNG')">
+                <img src="CLOTHING/I9.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I9.PNG')">
+                <img src="CLOTHING/I10.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I10.PNG')">
+                <img src="CLOTHING/I17.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I17.PNG')">
+                <img src="CLOTHING/I11.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I11.PNG')">
+                <img src="CLOTHING/I12.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I12.PNG')">
+                <img src="CLOTHING/I13.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I13.PNG')">
+                <img src="CLOTHING/I14.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I14.PNG')">
+                <img src="CLOTHING/I15.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I15.PNG')">
+                <img src="CLOTHING/I16.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I16.PNG')">
+                <img src="CLOTHING/A.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/A.PNG')">
+                <img src="CLOTHING/B.PNG" alt="Black Hoodie" onclick="selectTrait('clothing', 'CLOTHING/B.PNG')">
+                <img src="CLOTHING/C.PNG" alt="Grey Hoodie" onclick="selectTrait('clothing', 'CLOTHING/C.PNG')">
+                <img src="CLOTHING/D.PNG" alt="Maroon Hoodie" onclick="selectTrait('clothing', 'CLOTHING/D.PNG')">
+                <img src="CLOTHING/E.PNG" alt="Charcoal Hoodie" onclick="selectTrait('clothing', 'CLOTHING/E.PNG')">
+                <img src="CLOTHING/F.PNG" alt="Blue Hoodie" onclick="selectTrait('clothing', 'CLOTHING/F.PNG')">
+                <img src="CLOTHING/G.PNG" alt="Green Hoodie" onclick="selectTrait('clothing', 'CLOTHING/G.PNG')">
+                <img src="CLOTHING/H.PNG" alt="Yellow Hoodie" onclick="selectTrait('clothing', 'CLOTHING/H.PNG')">
+                <img src="CLOTHING/I.PNG" alt="Orange Hoodie" onclick="selectTrait('clothing', 'CLOTHING/I.PNG')">
+                <img src="CLOTHING/J.PNG" alt="Red Hoodie" onclick="selectTrait('clothing', 'CLOTHING/J.PNG')">
+                <img src="CLOTHING/K.PNG" alt="JPGPAPII Hoodie" onclick="selectTrait('clothing', 'CLOTHING/K.PNG')">
+                <img src="CLOTHING/L.PNG" alt="Giraffe Hoodie" onclick="selectTrait('clothing', 'CLOTHING/L.PNG')">
+                <img src="CLOTHING/M.PNG" alt="CAMO Hoodie" onclick="selectTrait('clothing', 'CLOTHING/M.PNG')">
+                <img src="CLOTHING/N.PNG" alt="Charcoal Hoodie" onclick="selectTrait('clothing', 'CLOTHING/N.PNG')">
+                <img src="CLOTHING/O.PNG" alt="Charcoal Hoodie" onclick="selectTrait('clothing', 'CLOTHING/O.PNG')">
+                <img src="CLOTHING/P.PNG" alt="Charcoal Hoodie" onclick="selectTrait('clothing', 'CLOTHING/P.PNG')">
+                <img src="CLOTHING/1.PNG" alt="White Hoodie" onclick="selectTrait('clothing', 'CLOTHING/1.PNG')">
+                <img src="CLOTHING/2.PNG" alt="Black Hoodie" onclick="selectTrait('clothing', 'CLOTHING/2.PNG')">
+                <img src="CLOTHING/6.PNG" alt="Grey Hoodie" onclick="selectTrait('clothing', 'CLOTHING/6.PNG')">
+                <img src="CLOTHING/4.PNG" alt="Maroon Hoodie" onclick="selectTrait('clothing', 'CLOTHING/4.PNG')">
+                <img src="CLOTHING/5.PNG" alt="Charcoal Hoodie" onclick="selectTrait('clothing', 'CLOTHING/5.PNG')">
+                <img src="CLOTHING/3.PNG" alt="Blue Hoodie" onclick="selectTrait('clothing', 'CLOTHING/3.PNG')">
+                <img src="CLOTHING/7.PNG" alt="Green Hoodie" onclick="selectTrait('clothing', 'CLOTHING/7.PNG')">
+                <img src="CLOTHING/8.PNG" alt="Yellow Hoodie" onclick="selectTrait('clothing', 'CLOTHING/8.PNG')">
+                <img src="CLOTHING/9.PNG" alt="Orange Hoodie" onclick="selectTrait('clothing', 'CLOTHING/9.PNG')">
+                <img src="CLOTHING/10.PNG" alt="Red Hoodie" onclick="selectTrait('clothing', 'CLOTHING/10.PNG')">
+                <img src="CLOTHING/11.PNG" alt="JPGPAPII Hoodie" onclick="selectTrait('clothing', 'CLOTHING/11.PNG')">
+                <img src="CLOTHING/13A.PNG" alt="Giraffe Hoodie" onclick="selectTrait('clothing', 'CLOTHING/13A.PNG')">
+                <img src="CLOTHING/27.PNG" alt="CAMO Hoodie" onclick="selectTrait('clothing', 'CLOTHING/27.PNG')">
+                <img src="CLOTHING/28.PNG" alt="Charcoal Hoodie" onclick="selectTrait('clothing', 'CLOTHING/28.PNG')">
+                <img src="CLOTHING/14.PNG" alt="Tie-Dye Hoodie" onclick="selectTrait('clothing', 'CLOTHING/14.PNG')">
+                <img src="CLOTHING/12.PNG" alt="OLLIE Special Hoodie" onclick="selectTrait('clothing', 'CLOTHING/12.PNG')">
+                <img src="CLOTHING/23.PNG" alt="Tie Dye Tee" onclick="selectTrait('clothing', 'CLOTHING/23.PNG')">
+                <img src="CLOTHING/29.PNG" alt="TEE1" onclick="selectTrait('clothing', 'CLOTHING/29.PNG')">
+                <img src="CLOTHING/30.PNG" alt="TEE2" onclick="selectTrait('clothing', 'CLOTHING/30.PNG')">
+                <img src="CLOTHING/31.PNG" alt="TEE3" onclick="selectTrait('clothing', 'CLOTHING/31.PNG')">
+                <img src="CLOTHING/32.PNG" alt="TEE4" onclick="selectTrait('clothing', 'CLOTHING/32.PNG')">
+                <img src="CLOTHING/34.PNG" alt="TEE6" onclick="selectTrait('clothing', 'CLOTHING/34.PNG')">
+                <img src="CLOTHING/35.PNG" alt="TEE7" onclick="selectTrait('clothing', 'CLOTHING/35.PNG')">
+                <img src="CLOTHING/36.PNG" alt="TEE8" onclick="selectTrait('clothing', 'CLOTHING/36.PNG')">
+                <img src="CLOTHING/37.PNG" alt="TEE9" onclick="selectTrait('clothing', 'CLOTHING/37.PNG')">
+                <img src="CLOTHING/38.PNG" alt="TEE9" onclick="selectTrait('clothing', 'CLOTHING/38.PNG')">
+                <img src="CLOTHING/44.PNG" alt="TEE9" onclick="selectTrait('clothing', 'CLOTHING/44.PNG')">
+                <img src="CLOTHING/39.PNG" alt="SUGARTOWN" onclick="selectTrait('clothing', 'CLOTHING/39.PNG')">
+                <img src="CLOTHING/40.PNG" alt="QUADJACKET" onclick="selectTrait('clothing', 'CLOTHING/40.PNG')">
+                <img src="CLOTHING/41.PNG" alt="LUMBERJACK" onclick="selectTrait('clothing', 'CLOTHING/41.PNG')">
+                <img src="CLOTHING/42.PNG" alt="SUIT" onclick="selectTrait('clothing', 'CLOTHING/42.PNG')">
+                <img src="CLOTHING/43.PNG" alt="GOKU" onclick="selectTrait('clothing', 'CLOTHING/43.PNG')">
+                <img src="CLOTHING/25.PNG" alt="Samurai" onclick="selectTrait('clothing', 'CLOTHING/25.PNG')">
+                <img src="CLOTHING/24.PNG" alt="Wizard" onclick="selectTrait('clothing', 'CLOTHING/24.PNG')">
+                <img src="CLOTHING/26.PNG" alt="Viking" onclick="selectTrait('clothing', 'CLOTHING/26.PNG')">
+                <img src="CLOTHING/16.PNG" alt="Knight Suit" onclick="selectTrait('clothing', 'CLOTHING/16.PNG')">
+                <img src="CLOTHING/17.PNG" alt="Pirate Suit" onclick="selectTrait('clothing', 'CLOTHING/17.PNG')">
+                <img src="CLOTHING/18.PNG" alt="Red Varsity" onclick="selectTrait('clothing', 'CLOTHING/18.PNG')">
+                <img src="CLOTHING/19.PNG" alt="Blue Varsity" onclick="selectTrait('clothing', 'CLOTHING/19.PNG')">
+                <img src="CLOTHING/21.PNG" alt="Cowboy" onclick="selectTrait('clothing', 'CLOTHING/21.PNG')">
+                <img src="CLOTHING/20.PNG" alt="Uncle Sam Suit" onclick="selectTrait('clothing', 'CLOTHING/20.PNG')">
+                <img src="CLOTHING/22.PNG" alt="Captain Jacket" onclick="selectTrait('clothing', 'CLOTHING/22.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="hoodieupCategory">
+            <div class="trait-options">
+                <img src="CLOTHING/1A.PNG" alt="White Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/1A.PNG')">
+                <img src="CLOTHING/2A.PNG" alt="Black Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/2A.PNG')">
+                <img src="CLOTHING/6A.PNG" alt="Grey Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/6A.PNG')">
+                <img src="CLOTHING/4A.PNG" alt="Maroon Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/4A.PNG')">
+                <img src="CLOTHING/5A.PNG" alt="Charcoal Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/5A.PNG')">
+                <img src="CLOTHING/3A.PNG" alt="Blue Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/3A.PNG')">
+                <img src="CLOTHING/7A.PNG" alt="Green Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/7A.PNG')">
+                <img src="CLOTHING/8A.PNG" alt="Yellow Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/8A.PNG')">
+                <img src="CLOTHING/9A.PNG" alt="Orange Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/9A.PNG')">
+                <img src="CLOTHING/10A.PNG" alt="Red Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/10A.PNG')">
+                <img src="CLOTHING/11A.PNG" alt="JPGPAPII Hoodie" onclick="selectTrait('clothing', 'CLOTHING/11A.PNG')">
+                <img src="CLOTHING/13.PNG" alt="Giraffe Hoodie" onclick="selectTrait('clothing', 'CLOTHING/13.PNG')">
+                <img src="CLOTHING/27A.PNG" alt="CAMO Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/27A.PNG')">
+                <img src="CLOTHING/28A.PNG" alt="TIGER Hoodie Up" onclick="selectTrait('clothing', 'CLOTHING/28A.PNG')">
+                <img src="CLOTHING/14A.PNG" alt="Tie-Dye Hoodie UP" onclick="selectTrait('clothing', 'CLOTHING/14A.PNG')">
+                <img src="CLOTHING/12A.PNG" alt="OLLIE Special Hoodie" onclick="selectTrait('clothing', 'CLOTHING/12A.PNG')">           
+            </div>
+        </div>
+        <div class="trait-category" id="accessoriesCategory">
+            <div class="trait-options">
+                <img src="GLASSES/A.PNG" alt="No Glasses" onclick="selectTrait('accessories', 'GLASSES/AA.PNG')">
+                <img src="GLASSES/1.PNG" alt="Pit Vipers" onclick="selectTrait('accessories', 'GLASSES/1.PNG')">
+                <img src="GLASSES/E.PNG" alt="Pit Vipers" onclick="selectTrait('accessories', 'GLASSES/E.PNG')">
+                <img src="GLASSES/F.PNG" alt="Pit Vipers" onclick="selectTrait('accessories', 'GLASSES/F.PNG')">
+                <img src="GLASSES/G.PNG" alt="Pit Vipers" onclick="selectTrait('accessories', 'GLASSES/G.PNG')">
+                <img src="GLASSES/H.PNG" alt="Pit Vipers" onclick="selectTrait('accessories', 'GLASSES/H.PNG')">
+                <img src="GLASSES/I.PNG" alt="Pit Vipers" onclick="selectTrait('accessories', 'GLASSES/I.PNG')">
+                <img src="GLASSES/A1.PNG" alt="VR" onclick="selectTrait('accessories', 'GLASSES/A1.PNG')">
+                <img src="GLASSES/B.PNG" alt="VR" onclick="selectTrait('accessories', 'GLASSES/B.PNG')">
+                <img src="GLASSES/C.PNG" alt="VR" onclick="selectTrait('accessories', 'GLASSES/C.PNG')">
+                <img src="GLASSES/D.PNG" alt="VR" onclick="selectTrait('accessories', 'GLASSES/D.PNG')">
+                <img src="GLASSES/8.PNG" alt="VR" onclick="selectTrait('accessories', 'GLASSES/8.PNG')">
+                <img src="GLASSES/9.PNG" alt="CRAZY" onclick="selectTrait('accessories', 'GLASSES/9.PNG')">
+                <img src="GLASSES/2.PNG" alt="Ski Goggles" onclick="selectTrait('accessories', 'GLASSES/2.PNG')">
+                <img src="GLASSES/3.PNG" alt="3D Glasses" onclick="selectTrait('accessories', 'GLASSES/3.PNG')">
+                <img src="GLASSES/4.PNG" alt="Incognito" onclick="selectTrait('accessories', 'GLASSES/4.PNG')">
+                <img src="GLASSES/5.PNG" alt="Space Glasses" onclick="selectTrait('accessories', 'GLASSES/5.PNG')">
+                <img src="GLASSES/6.PNG" alt="Sunnies" onclick="selectTrait('accessories', 'GLASSES/6.PNG')">
+                <img src="GLASSES/7.PNG" alt="John Lennons" onclick="selectTrait('accessories', 'GLASSES/7.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="hatCategory">
+            <div class="trait-options">
+                <img src="HATS/A.PNG" alt="No Hat" onclick="selectTrait('hat', 'HATS/AA.PNG')">
+               <img src="HATS/K.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/K.PNG')">
+               <img src="HATS/L.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/L.PNG')">
+               <img src="HATS/M.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/M.PNG')">
+               <img src="HATS/N.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/N.PNG')">
+               <img src="HATS/O.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/O.PNG')">
+               <img src="HATS/P.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/P.PNG')">
+               <img src="HATS/Q.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/Q.PNG')">
+               <img src="HATS/R.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/R.PNG')">
+               <img src="HATS/S.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/S.PNG')">
+               <img src="HATS/B.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/B.PNG')">
+                <img src="HATS/C.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/C.PNG')">
+                <img src="HATS/D.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/D.PNG')">
+                <img src="HATS/E.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/E.PNG')">
+                <img src="HATS/F.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/F.PNG')">
+                <img src="HATS/G.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/G.PNG')">
+                <img src="HATS/H.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/H.PNG')">
+                <img src="HATS/I.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/I.PNG')">
+                <img src="HATS/J.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/J.PNG')">
+                <img src="HATS/1.PNG" alt="Blue Beanie" onclick="selectTrait('hat', 'HATS/1.PNG')">
+                <img src="HATS/2.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/2.PNG')">
+                <img src="HATS/4.PNG" alt="White Beanie" onclick="selectTrait('hat', 'HATS/4.PNG')">
+                <img src="HATS/3.PNG" alt="Green Beanie" onclick="selectTrait('hat', 'HATS/3.PNG')">
+                <img src="HATS/48.PNG" alt="QUAD BEANIE" onclick="selectTrait('hat', 'HATS/48.PNG')">
+                <img src="HATS/33.PNG" alt="JPGPAPII Hat" onclick="selectTrait('hat', 'HATS/33.PNG')">
+                <img src="HATS/15.PNG" alt="White Sideways Hat" onclick="selectTrait('hat', 'HATS/15.PNG')">
+                <img src="HATS/16.PNG" alt="Blonde Sideways Hat" onclick="selectTrait('hat', 'HATS/16.PNG')">
+                <img src="HATS/17.PNG" alt="Brown Sideways Hat" onclick="selectTrait('hat', 'HATS/17.PNG')">
+                <img src="HATS/18.PNG" alt="Black Sideways Hat" onclick="selectTrait('hat', 'HATS/18.PNG')">
+                <img src="HATS/19.PNG" alt="White Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/19.PNG')">
+                <img src="HATS/20.PNG" alt="White Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/20.PNG')">
+                <img src="HATS/21.PNG" alt="White Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/21.PNG')">
+                <img src="HATS/39.PNG" alt="White Hair Cowboy" onclick="selectTrait('hat', 'HATS/39.PNG')">
+                <img src="HATS/22.PNG" alt="Blonde Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/22.PNG')">
+                <img src="HATS/23.PNG" alt="Blonde Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/23.PNG')">
+                <img src="HATS/24.PNG" alt="Blonde Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/24.PNG')">
+                <img src="HATS/38.PNG" alt="Blonde Hair Cowboy" onclick="selectTrait('hat', 'HATS/38.PNG')">
+                <img src="HATS/25.PNG" alt="Brown Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/25.PNG')">
+                <img src="HATS/26.PNG" alt="Brown Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/26.PNG')">
+                <img src="HATS/27.PNG" alt="Brown Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/27.PNG')">
+                <img src="HATS/40.PNG" alt="Brown Hair Cowboy" onclick="selectTrait('hat', 'HATS/40.PNG')">
+                <img src="HATS/28.PNG" alt="Black Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/28.PNG')">
+                <img src="HATS/29.PNG" alt="Black Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/29.PNG')">
+                <img src="HATS/30.PNG" alt="Black Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/30.PNG')">
+                <img src="HATS/47.PNG" alt="SUGARTOWN BUCKETHAT" onclick="selectTrait('hat', 'HATS/47.PNG')">
+                <img src="HATS/49.PNG" alt="Captain Hat" onclick="selectTrait('hat', 'HATS/49.PNG')">
+                <img src="HATS/46.PNG" alt="UNCLE SAM" onclick="selectTrait('hat', 'HATS/46.PNG')">
+                <img src="HATS/50.PNG" alt="NINGA" onclick="selectTrait('hat', 'HATS/50.PNG')">
+                <img src="HATS/41.PNG" alt="Black Hair Cowboy" onclick="selectTrait('hat', 'HATS/41.PNG')">
+                <img src="HATS/31.PNG" alt="Knight Helmet 1" onclick="selectTrait('hat', 'HATS/31.PNG')">
+                <img src="HATS/32.PNG" alt="Knight Helmet 2" onclick="selectTrait('hat', 'HATS/32.PNG')">
+                <img src="HATS/35.PNG" alt="Pirate Hat" onclick="selectTrait('hat', 'HATS/35.PNG')">
+                <img src="HATS/44.PNG" alt="Samurai" onclick="selectTrait('hat', 'HATS/44.PNG')">
+                <img src="HATS/45.PNG" alt="Viking" onclick="selectTrait('hat', 'HATS/45.PNG')">
+                <img src="HATS/34.PNG" alt="Pirate Hat/Eyepatch" onclick="selectTrait('hat', 'HATS/34.PNG')">
+                <img src="HATS/7.PNG" alt="Taco Hat" onclick="selectTrait('hat', 'HATS/7.PNG')">
+                <img src="HATS/36.PNG" alt="Fireman Hat" onclick="selectTrait('hat', 'HATS/36.PNG')">
+                <img src="HATS/37.PNG" alt="Wizard" onclick="selectTrait('hat', 'HATS/37.PNG')">
+                <img src="HATS/42.PNG" alt="Halo" onclick="selectTrait('hat', 'HATS/42.PNG')">
+                <img src="HATS/43.PNG" alt="Captain Hat" onclick="selectTrait('hat', 'HATS/43.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="hathoodieCategory">
+            <div class="trait-options">
+                <img src="HATS/A.PNG" alt="No Hat" onclick="selectTrait('hat', 'HATS/AA.PNG')">
+                <img src="HATS/1.PNG" alt="Blue Beanie" onclick="selectTrait('hat', 'HATS/1.PNG')">
+                <img src="HATS/2.PNG" alt="Black Beanie" onclick="selectTrait('hat', 'HATS/2.PNG')">
+                <img src="HATS/4.PNG" alt="White Beanie" onclick="selectTrait('hat', 'HATS/4.PNG')">
+                <img src="HATS/3.PNG" alt="Green Beanie" onclick="selectTrait('hat', 'HATS/3.PNG')">
+                <img src="HATS/33.PNG" alt="JPGPAPII Hat" onclick="selectTrait('hat', 'HATS/33.PNG')">
+                <img src="HATS/19.PNG" alt="White Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/19.PNG')">
+                <img src="HATS/20.PNG" alt="White Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/20.PNG')">
+                <img src="HATS/21.PNG" alt="White Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/21.PNG')">
+                <img src="HATS/22.PNG" alt="Blonde Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/22.PNG')">
+                <img src="HATS/23.PNG" alt="Blonde Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/23.PNG')">
+                <img src="HATS/24.PNG" alt="Blonde Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/24.PNG')"> 
+                <img src="HATS/25.PNG" alt="Brown Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/25.PNG')">
+                <img src="HATS/26.PNG" alt="Brown Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/26.PNG')">
+                <img src="HATS/27.PNG" alt="Brown Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/27.PNG')"> 
+                <img src="HATS/28.PNG" alt="Black Hair Red Backwards Hat" onclick="selectTrait('hat', 'HATS/28.PNG')">
+                <img src="HATS/29.PNG" alt="Black Hair Black Backwards Hat" onclick="selectTrait('hat', 'HATS/29.PNG')">
+                <img src="HATS/30.PNG" alt="Black Hair Blue Backwards Hat" onclick="selectTrait('hat', 'HATS/30.PNG')"> 
+                <img src="HATS/42.PNG" alt="Halo" onclick="selectTrait('hat', 'HATS/42.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="handCategory"> 
+            <div class="trait-options">
+                <img src="HANDS/A.PNG" alt="No Hand Gesture" onclick="selectTrait('hand', 'HANDS/AA.PNG')">
+                <img src="HANDS/0.PNG" alt="Skin 1 Shaka" onclick="selectTrait('hand', 'HANDS/0.PNG')">
+                <img src="HANDS/12.PNG" alt="Skin 1 Shaka" onclick="selectTrait('hand', 'HANDS/12.PNG')">
+                <img src="HANDS/13.PNG" alt="Skin 2 Shaka" onclick="selectTrait('hand', 'HANDS/13.PNG')">
+                <img src="HANDS/14.PNG" alt="Skin 3 Shaka" onclick="selectTrait('hand', 'HANDS/14.PNG')">
+                <img src="HANDS/15.PNG" alt="Skin 4 Shaka" onclick="selectTrait('hand', 'HANDS/15.PNG')">
+                <img src="HANDS/8.PNG" alt="Skin 1 Double Shaka" onclick="selectTrait('hand', 'HANDS/8.PNG')">
+                <img src="HANDS/9.PNG" alt="Skin 2 Double Shaka" onclick="selectTrait('hand', 'HANDS/9.PNG')">
+                <img src="HANDS/10.PNG" alt="Skin 3 Double Shaka" onclick="selectTrait('hand', 'HANDS/10.PNG')">
+                <img src="HANDS/11.PNG" alt="Skin 4 Double Shaka" onclick="selectTrait('hand', 'HANDS/11.PNG')">
+                <img src="HANDS/16.PNG" alt="Skin 1 Rock-On" onclick="selectTrait('hand', 'HANDS/16.PNG')">
+                <img src="HANDS/17.PNG" alt="Skin 2 Rock-On" onclick="selectTrait('hand', 'HANDS/17.PNG')">
+                <img src="HANDS/18.PNG" alt="Skin 3 Rock-On" onclick="selectTrait('hand', 'HANDS/18.PNG')">
+                <img src="HANDS/19.PNG" alt="Skin 4 Rock-On" onclick="selectTrait('hand', 'HANDS/19.PNG')">
+                <img src="HANDS/20.PNG" alt="Skin 1 Spot-On" onclick="selectTrait('hand', 'HANDS/20.PNG')">
+                <img src="HANDS/21.PNG" alt="Skin 2 Spot-On" onclick="selectTrait('hand', 'HANDS/21.PNG')">
+                <img src="HANDS/22.PNG" alt="Skin 3 Spot-On" onclick="selectTrait('hand', 'HANDS/22.PNG')">
+                <img src="HANDS/23.PNG" alt="Skin 4 Spot-On" onclick="selectTrait('hand', 'HANDS/23.PNG')">
+                <img src="HANDS/1.PNG" alt="Skin 1 Gaming Controller" onclick="selectTrait('hand', 'HANDS/1.PNG')">
+                <img src="HANDS/1A.PNG" alt="Skin 2 Gaming Controller" onclick="selectTrait('hand', 'HANDS/1A.PNG')">
+                <img src="HANDS/1B.PNG" alt="Skin 3 Gaming Controller" onclick="selectTrait('hand', 'HANDS/1B.PNG')">
+                <img src="HANDS/1C.PNG" alt="Skin 4 Gaming Controller" onclick="selectTrait('hand', 'HANDS/1C.PNG')">
+                <img src="HANDS/2.PNG" alt="Skin 1 Snowball" onclick="selectTrait('hand', 'HANDS/2.PNG')">
+                <img src="HANDS/2A.PNG" alt="Skin 2 Snowball" onclick="selectTrait('hand', 'HANDS/2A.PNG')">
+                <img src="HANDS/2B.PNG" alt="Skin 3 Snowball" onclick="selectTrait('hand', 'HANDS/2B.PNG')">
+                <img src="HANDS/2C.PNG" alt="Skin 4 Snowball" onclick="selectTrait('hand', 'HANDS/2C.PNG')">
+                <img src="HANDS/3.PNG" alt="Skin 1 Baseball" onclick="selectTrait('hand', 'HANDS/3.PNG')">
+                <img src="HANDS/3A.PNG" alt="Skin 2 Baseball" onclick="selectTrait('hand', 'HANDS/3A.PNG')">
+                <img src="HANDS/3B.PNG" alt="Skin 3 Baseball" onclick="selectTrait('hand', 'HANDS/3B.PNG')">
+                <img src="HANDS/3C.PNG" alt="Skin 4 Baseball" onclick="selectTrait('hand', 'HANDS/3C.PNG')">
+                <img src="HANDS/4.PNG" alt="Skin 1 Finger (For Ball)" onclick="selectTrait('hand', 'HANDS/4.PNG')">
+                <img src="HANDS/5.PNG" alt="Skin 2 Finger (For Ball)" onclick="selectTrait('hand', 'HANDS/5.PNG')">
+                <img src="HANDS/6.PNG" alt="Skin 3 Finger (For Ball)" onclick="selectTrait('hand', 'HANDS/6.PNG')">
+                <img src="HANDS/7.PNG" alt="Skin 4 Finger (For Ball)" onclick="selectTrait('hand', 'HANDS/7.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="facialhairCategory"> 
+            <div class="trait-options">
+                <img src="FACIALHAIR/1.PNG" alt="No Hand Gesture" onclick="selectTrait('hand', 'FACIALHAIR/1.PNG')">
+                <img src="FACIALHAIR/2.PNG" alt="No Hand Gesture" onclick="selectTrait('hand', 'FACIALHAIR/2.PNG')">
+                <img src="FACIALHAIR/3.PNG" alt="No Hand Gesture" onclick="selectTrait('hand', 'FACIALHAIR/3.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="extraCategory"> 
+            <div class="trait-options">
+                <img src="EXTRA/A.PNG" alt="No EXTRA" onclick="selectTrait('hand', 'EXTRA/AA.PNG')">
+                <img src="EXTRA/1.PNG" alt="No Hand Gesture" onclick="selectTrait('hand', 'EXTRA/1.PNG')">
+                <img src="EXTRA/2.PNG" alt="No Hand Gesture" onclick="selectTrait('hand', 'EXTRA/2.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="spaceshineCategory">
+            <div class="trait-options">
+                <img src="SPACESHINE/1.PNG" alt="Soccer Ball" onclick="selectTrait('ball', 'SPACESHINE/1.PNG')">
+                <img src="SPACESHINE/2.PNG" alt="Basketball" onclick="selectTrait('ball', 'SPACESHINE/2.PNG')">
+            </div>
+        </div>
+        <div class="trait-category" id="ballCategory">
+            <div class="trait-options">
+                <img src="HAND-BALLS/A.PNG" alt="No Ball" onclick="selectTrait('ball', 'HAND-BALLS/AA.PNG')">
+                <img src="HAND-BALLS/1.PNG" alt="Soccer Ball" onclick="selectTrait('ball', 'HAND-BALLS/1.PNG')">
+                <img src="HAND-BALLS/2.PNG" alt="Basketball" onclick="selectTrait('ball', 'HAND-BALLS/2.PNG')">
+                <img src="HAND-BALLS/3.PNG" alt="Basketball" onclick="selectTrait('ball', 'HAND-BALLS/3.PNG')">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+    function selectTrait(category, filename) {
+        if (filename) {
+            document.getElementById(category).src = filename;
+        }
+    }
+
+    function showCategory(categoryId) {
+        document.querySelectorAll('.trait-category').forEach(category => {
+            category.classList.remove('active');
+        });
+        document.getElementById(categoryId).classList.add('active');
+        document.getElementById('traitPictures').style.display = 'flex';
+    }
+
+    function saveCharacterImage() {
+        html2canvas(document.getElementById("characterDisplay"), {scale: 1}).then(canvas => {
+            let link = document.createElement('a');
+            link.download = 'my-character.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }).catch(error => console.error('Error capturing canvas:', error));
+    }
+
+    function randomizeCharacter() {
+        const traits = {
+            background: [
+                "BACKGROUNDS/1.PNG", "BACKGROUNDS/IMG_1529.PNG", "BACKGROUNDS/IMG_1530.PNG", 
+                "BACKGROUNDS/IMG_1531.PNG", "BACKGROUNDS/IMG_1532.PNG", "BACKGROUNDS/2.PNG",
+                "BACKGROUNDS/3.PNG", "BACKGROUNDS/4.PNG", "BACKGROUNDS/13.PNG", "BACKGROUNDS/5.PNG",
+                "BACKGROUNDS/6.PNG", "BACKGROUNDS/7.PNG", "BACKGROUNDS/8.PNG", "BACKGROUNDS/9.PNG",
+                "BACKGROUNDS/10.PNG", "BACKGROUNDS/11.PNG", "BACKGROUNDS/12.PNG", "BACKGROUNDS/14.PNG",
+                "BACKGROUNDS/15.PNG", "BACKGROUNDS/16.PNG", "BACKGROUNDS/17.PNG", "BACKGROUNDS/18.PNG",
+                "BACKGROUNDS/19.PNG", "BACKGROUNDS/20.PNG", "BACKGROUNDS/21.PNG"
+            ],
+            skin: [
+                "SKIN/1.PNG", "SKIN/2.PNG", "SKIN/3.PNG", "SKIN/4.PNG"
+            ],
+            face: [
+                "FACE/1.PNG", "FACE/1A.PNG", "FACE/2.PNG", "FACE/3.PNG", "FACE/4.PNG", "FACE/5.PNG",
+                "FACE/6.PNG", "FACE/7.PNG"
+            ],
+            clothing: [
+                "CLOTHING/1.PNG", "CLOTHING/2.PNG", "CLOTHING/6.PNG", "CLOTHING/4.PNG", "CLOTHING/5.PNG", 
+                "CLOTHING/3.PNG", "CLOTHING/7.PNG", "CLOTHING/8.PNG", "CLOTHING/9.PNG", "CLOTHING/10.PNG",
+                "CLOTHING/11.PNG", "CLOTHING/13A.PNG", "CLOTHING/27.PNG", "CLOTHING/28.PNG", "CLOTHING/14.PNG",
+                "CLOTHING/12.PNG", "CLOTHING/23.PNG", "CLOTHING/29.PNG", "CLOTHING/30.PNG", "CLOTHING/31.PNG",
+                "CLOTHING/32.PNG", "CLOTHING/34.PNG", "CLOTHING/35.PNG", "CLOTHING/36.PNG", "CLOTHING/37.PNG",
+                "CLOTHING/38.PNG", "CLOTHING/25.PNG", "CLOTHING/24.PNG", "CLOTHING/26.PNG", "CLOTHING/16.PNG",
+                "CLOTHING/17.PNG", "CLOTHING/18.PNG", "CLOTHING/19.PNG", "CLOTHING/21.PNG", "CLOTHING/20.PNG",
+                "CLOTHING/22.PNG"
+            ],
+            hair: [
+                "HAIR/A.PNG", "HAIR/29.PNG", "HAIR/33.PNG", "HAIR/37.PNG", "HAIR/41.PNG", "HAIR/45.PNG",
+                "HAIR/49.PNG", "HAIR/53.PNG", "HAIR/57.PNG", "HAIR/30.PNG", "HAIR/34.PNG", "HAIR/38.PNG",
+                "HAIR/42.PNG", "HAIR/46.PNG", "HAIR/50.PNG", "HAIR/54.PNG", "HAIR/58.PNG", "HAIR/31.PNG",
+                "HAIR/35.PNG", "HAIR/39.PNG", "HAIR/43.PNG", "HAIR/47.PNG", "HAIR/51.PNG", "HAIR/55.PNG",
+                "HAIR/59.PNG", "HAIR/32.PNG", "HAIR/36.PNG", "HAIR/40.PNG", "HAIR/44.PNG", "HAIR/48.PNG",
+                "HAIR/52.PNG", "HAIR/56.PNG", "HAIR/60.PNG"
+            ],
+            hat: [
+                "HATS/A.PNG", "HATS/1.PNG", "HATS/2.PNG", "HATS/4.PNG", "HATS/3.PNG", "HATS/33.PNG",
+                "HATS/15.PNG", "HATS/16.PNG", "HATS/17.PNG", "HATS/18.PNG", "HATS/19.PNG", "HATS/20.PNG",
+                "HATS/21.PNG", "HATS/39.PNG", "HATS/22.PNG", "HATS/23.PNG", "HATS/24.PNG", "HATS/38.PNG",
+                "HATS/25.PNG", "HATS/26.PNG", "HATS/27.PNG", "HATS/40.PNG", "HATS/28.PNG", "HATS/29.PNG",
+                "HATS/30.PNG", "HATS/41.PNG", "HATS/31.PNG", "HATS/32.PNG", "HATS/35.PNG", "HATS/44.PNG",
+                "HATS/45.PNG", "HATS/34.PNG", "HATS/7.PNG", "HATS/36.PNG", "HATS/37.PNG", "HATS/42.PNG",
+                "HATS/43.PNG"
+            ],
+            hoodie: [
+                "CLOTHING/1A.PNG", "CLOTHING/2A.PNG", "CLOTHING/6A.PNG", "CLOTHING/4A.PNG", "CLOTHING/5A.PNG",
+                "CLOTHING/3A.PNG", "CLOTHING/7A.PNG", "CLOTHING/8A.PNG", "CLOTHING/9A.PNG", "CLOTHING/10A.PNG",
+                "CLOTHING/11A.PNG", "CLOTHING/13.PNG", "CLOTHING/27A.PNG", "CLOTHING/28A.PNG", "CLOTHING/14A.PNG",
+                "CLOTHING/12A.PNG"
+            ],
+            hairhoodie: [
+                "HAIRHOODIEUP/A.PNG", "HAIRHOODIEUP/9.PNG", "HAIRHOODIEUP/13.PNG", "HAIRHOODIEUP/21.PNG",
+                "HAIRHOODIEUP/17.PNG", "HAIRHOODIEUP/1.PNG", "HAIRHOODIEUP/5.PNG", "HAIRHOODIEUP/25.PNG",
+                "HAIRHOODIEUP/10.PNG", "HAIRHOODIEUP/14.PNG", "HAIRHOODIEUP/22.PNG", "HAIRHOODIEUP/18.PNG",
+                "HAIRHOODIEUP/2.PNG", "HAIRHOODIEUP/6.PNG", "HAIRHOODIEUP/26.PNG", "HAIRHOODIEUP/11.PNG",
+                "HAIRHOODIEUP/15.PNG", "HAIRHOODIEUP/23.PNG", "HAIRHOODIEUP/19.PNG", "HAIRHOODIEUP/3.PNG",
+                "HAIRHOODIEUP/7.PNG", "HAIRHOODIEUP/27.PNG", "HAIRHOODIEUP/12.PNG", "HAIRHOODIEUP/16.PNG",
+                "HAIRHOODIEUP/24.PNG", "HAIRHOODIEUP/20.PNG", "HAIRHOODIEUP/4.PNG", "HAIRHOODIEUP/8.PNG",
+                "HAIRHOODIEUP/28.PNG"
+            ],
+            hathoodie: [
+                "HATS/A.PNG", "HATS/1.PNG", "HATS/2.PNG", "HATS/4.PNG", "HATS/3.PNG", "HATS/33.PNG",
+                "HATS/19.PNG", "HATS/20.PNG", "HATS/21.PNG", "HATS/22.PNG", "HATS/23.PNG", "HATS/24.PNG",
+                "HATS/25.PNG", "HATS/26.PNG", "HATS/27.PNG", "HATS/28.PNG", "HATS/29.PNG", "HATS/30.PNG",
+                "HATS/42.PNG"
+            ],
+            accessories: [
+                "GLASSES/A.PNG", "GLASSES/1.PNG", "GLASSES/8.PNG", "GLASSES/9.PNG", "GLASSES/2.PNG", 
+                "GLASSES/3.PNG", "GLASSES/4.PNG", "GLASSES/5.PNG", "GLASSES/6.PNG", "GLASSES/7.PNG"
+            ],
+            hand: [
+                "HANDS/A.PNG", "HANDS/12.PNG", "HANDS/13.PNG", "HANDS/14.PNG", "HANDS/15.PNG", "HANDS/8.PNG",
+                "HANDS/9.PNG", "HANDS/10.PNG", "HANDS/11.PNG", "HANDS/16.PNG", "HANDS/17.PNG", "HANDS/18.PNG",
+                "HANDS/19.PNG", "HANDS/20.PNG", "HANDS/21.PNG", "HANDS/22.PNG", "HANDS/23.PNG", "HANDS/1.PNG",
+                "HANDS/1A.PNG", "HANDS/1B.PNG", "HANDS/1C.PNG", "HANDS/2.PNG", "HANDS/2A.PNG", "HANDS/2B.PNG",
+                "HANDS/2C.PNG", "HANDS/3.PNG", "HANDS/3A.PNG", "HANDS/3B.PNG", "HANDS/3C.PNG", "HANDS/4.PNG",
+                "HANDS/5.PNG", "HANDS/6.PNG", "HANDS/7.PNG"
+            ]
+        };
+
+        const selectRandomTrait = (category) => {
+            const options = traits[category];
+            const randomIndex = Math.floor(Math.random() * options.length);
+            return options[randomIndex];
+        };
+
+        // Combination 1
+        if (Math.random() < 0.5) {
+            selectTrait('background', selectRandomTrait('background'));
+            selectTrait('skin', selectRandomTrait('skin'));
+            selectTrait('face', selectRandomTrait('face'));
+            selectTrait('clothing', selectRandomTrait('clothing'));
+            if (Math.random() < 0.5) {
+                selectTrait('hair', selectRandomTrait('hair'));
+                selectTrait('hat', ''); // Clear hat
+            } else {
+                selectTrait('hat', selectRandomTrait('hat'));
+                selectTrait('hair', ''); // Clear hair
+            }
+        } else { // Combination 2
+            selectTrait('background', selectRandomTrait('background'));
+            selectTrait('skin', selectRandomTrait('skin'));
+            selectTrait('face', selectRandomTrait('face'));
+            selectTrait('clothing', selectRandomTrait('hoodie'));
+            if (Math.random() < 0.5) {
+                selectTrait('hair', selectRandomTrait('hairhoodie'));
+                selectTrait('hat', ''); // Clear hat
+            } else {
+                selectTrait('hat', selectRandomTrait('hathoodie'));
+                selectTrait('hair', ''); // Clear hair
+            }
+        }
+
+        // Optional categories
+        if (Math.random() < 0.5) {
+            selectTrait('accessories', selectRandomTrait('accessories'));
+        } else {
+            selectTrait('accessories', '');
+        }
+
+        if (Math.random() < 0.5) {
+            selectTrait('hand', selectRandomTrait('hand'));
+        } else {
+            selectTrait('hand', '');
+        }
+    }
+</script>
+</body>
+</html>
